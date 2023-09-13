@@ -1,0 +1,17 @@
+!.gitignore
+*.iml
+**/.idea
+**/out
+**/target
+**/.project
+**/.classpath
+**/build
+**/logs
+**/.gradle
+**/MANIFEST.MF
+**/.DS_Store
+**/.settings
+**/.java-version
+**/lombok.config
+
+/workspace/collect-server/ext/

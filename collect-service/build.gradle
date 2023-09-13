@@ -1,0 +1,23 @@
+dependencies {
+
+    api project(':collect-common')
+    api project(':collect-datasource')
+    api project(':collect-api')
+
+    api lib."spring-boot-starter-web"
+    api lib."spring-boot-starter-actuator"
+    api lib."micrometer"
+    api lib."cos_api"
+    api lib."vod_api"
+    api lib."spring-boot-starter"
+
+    annotationProcessor lib."spring-boot-configuration-processor"
+
+    testImplementation(lib."junit") {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation lib."spring-boot-starter-test"
+    testAnnotationProcessor lib."lombok"
+
+
+}

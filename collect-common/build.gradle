@@ -1,0 +1,16 @@
+dependencies {
+
+    api lib."common-lang3"
+    api lib."commons-codec"
+    api lib."common-collections4"
+    api lib."commons-io"
+    api lib."httpclient"
+    api lib."gson"
+    api lib."guava"
+    api lib."spring-boot-starter"
+    api lib."poi"
+    api lib."poi-ooxml"
+    api lib."spring-boot-starter-web"
+    api lib."spring-boot-starter-redis"
+    api lib."okhttp"
+}

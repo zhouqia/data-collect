@@ -1,0 +1,11 @@
+dependencies {
+    api project(':collect-common')
+
+    api lib.'mybatis-spring-boot-starter'
+    api lib.'mybatis'
+    implementation lib.'mbg'
+    api lib.'postgres'
+    api lib.'aspectjweaver'
+    api lib."swagger2"
+    api lib."clickhouse"
+}

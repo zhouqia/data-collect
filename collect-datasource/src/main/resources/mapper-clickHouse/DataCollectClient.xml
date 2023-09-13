@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ipharmacare.collect.data.mapper.OdsDataMapper">
+
+
+
+    <insert id="batchSaveOdsData">
+        insert into ods_data
+        (
+        uuid, is_encryption, source_type, data_type,
+        <if test="item.recordTime !=null">
+            record_time,
+        </if>
+         create_time, content
+        )values
+        <foreach collection="odsDataList" item="item" index="index"  separator=",">
+            (#{item.uuid},
+            #{item.isEncryption},
+            #{item.sourceType},
+            #{item.dataType},
+            <if test="item.recordTime !=null">
+                #{item.recordTime},
+            </if>
+            #{item.createTime},
+            #{item.content})
+        </foreach>
+    </insert>
+</mapper>
+
+

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <context id="report" targetRuntime="MyBatis3DynamicSql">
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+            <property name="addRemarkComments" value="false"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="org.postgresql.Driver"
+                        connectionURL="jdbc:postgresql://10.1.1.236:5432/iphms_mall"
+                        userId="root"
+                        password="ipharmacare">
+        </jdbcConnection>
+
+        <javaTypeResolver type="com.ipharmacare.platform.data.generate.SmallintResolver">
+            <property name="forceBigDecimals" value="true"/>
+            <property name="useJSR310Types" value="true"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.ipharmacare.mall.data.model"
+                            targetProject="mall-datasource/src/main/java">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <javaClientGenerator targetPackage="com.ipharmacare.mall.data.mapper"
+                             targetProject="mall-datasource/src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+        <!--<table tableName="supplier_app_info" domainObjectName="supplierAppInfo">
+            <property name="useActualColumnNames" value="false"/>
+            <property name="forceBigDecimals" value="false"/>
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" type="post"/>
+        </table>-->
+
+    </context>
+</generatorConfiguration>

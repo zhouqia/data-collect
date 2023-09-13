@@ -1,0 +1,30 @@
+dependencies {
+
+    api project(':collect-service')
+
+    api lib."spring-boot-starter-web"
+    api lib."spring-boot-starter-actuator"
+    api lib."micrometer"
+    api lib."cos_api"
+    api lib."spring-boot-starter"
+    api lib."spring-boot-starter-redis"
+    api lib."commons-pool2"
+    api lib."poi"
+    api lib."poi-ooxml"
+    api lib."swagger2"
+    api lib."swaggerBootstrapUI"
+    api lib."fastJson"
+    api lib."bcprov"
+    api lib."jasypt"
+
+    annotationProcessor lib."spring-boot-configuration-processor"
+
+
+    testImplementation(lib."junit") {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation lib."spring-boot-starter-test"
+    testAnnotationProcessor lib."lombok"
+
+}
+

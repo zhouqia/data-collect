@@ -1,0 +1,6 @@
+include 'collect-api'
+include 'collect-web'
+include 'collect-common'
+include 'collect-datasource'
+include 'collect-service'
+

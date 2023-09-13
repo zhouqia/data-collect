@@ -1,0 +1,187 @@
+import java.nio.charset.StandardCharsets
+
+buildscript {
+    ext {
+        springBootVersion = '2.4.5'
+    }
+    repositories {
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath('com.bmuschko:gradle-docker-plugin:6.1.1')
+    }
+}
+plugins {
+    id "org.sonarqube" version "2.7"
+}
+
+apply from: "dependencies.gradle"
+
+ext {
+    versionFile = file("version.properties")
+}
+
+class ProjectVersion {
+    Double major
+    String minor
+    Boolean release
+
+    ProjectVersion(Double major, String minor, Boolean release) {
+        this.major = major
+        this.minor = minor
+        this.release = release
+    }
+
+    @Override
+    String toString() {
+        "$major.$minor${release ? '.RELEASE' : '-SNAPSHOT'}"
+    }
+}
+
+allprojects {
+
+    apply plugin: 'maven'
+    apply plugin: 'idea'
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
+
+    idea {
+        module {
+            downloadJavadoc = true
+            downloadSources = true
+        }
+    }
+
+    group = 'com.ipharmacare.collect'
+    version = readVersion()
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    tasks.withType(JavaCompile) {
+        options.encoding(StandardCharsets.UTF_8.name())
+    }
+
+    publishing {
+        publications {
+            plugin(MavenPublication) {
+                from components.java
+                group "com.ipharmacare.collect"
+            }
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            exclude module: "slf4j-log4j12"
+            exclude module: "log4j"
+            exclude group: "org.apache.dubbo"
+            cacheChangingModulesFor 0, 'seconds'
+        }
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'org.springframework.boot') {
+                details.useVersion "2.4.5"
+            }
+            if (details.requested.group == 'org.springframework') {
+                details.useVersion "5.3.6"
+            }
+            if (details.requested.group == 'org.postgresql') {
+                details.useVersion "42.2.16"
+            }
+        }
+    }
+
+    sonarqube {
+        properties {
+            property "sonar.java.binaries", "build"
+        }
+    }
+
+    configurations.compile { transitive = false }
+
+    repositories {
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+        mavenCentral()
+    }
+
+    dependencies {
+        api lib."lombok"
+        annotationProcessor lib."lombok"
+    }
+
+
+    jar {
+        manifest {
+            attributes(
+                    'Implementation-Version': project.version.toString(),
+                    'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+                    'Build-Jdk': "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                    'Build-OS': "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}"
+            )
+        }
+        excludes = ['bootstrap.yml', 'logback-spring.xml']
+    }
+
+}
+
+subprojects {
+    task pd(type: DependencyReportTask) {}
+}
+
+task deleteWorkspace(type: Delete) {
+    delete "${rootProject.projectDir}/workspace/collect-server/etc"
+    delete "${rootProject.projectDir}/workspace/collect-server/ext"
+    delete "${rootProject.projectDir}/workspace/package"
+}
+
+task pack(type: Tar) {
+    archiveBaseName = "collect_server_provider-build-" + LocalDateTime.now().format("MMdd.HHmm")
+    archiveExtension = "tar.gz"
+    compression = Compression.GZIP
+    destinationDirectory = file("${rootProject.projectDir}/workspace/package/")
+    into('/') {
+        from "${rootProject.projectDir}/workspace/collect-server"
+    }
+}
+
+task copyJars(type: Copy, dependsOn: subprojects.jar) {
+    from project(':collect-web').jar
+    into "${rootProject.projectDir}/workspace/collect-server/ext/"
+}
+
+task copyDependencies(type: Copy) {
+    from project(':collect-web').configurations.runtimeClasspath
+    into "${rootProject.projectDir}/workspace/collect-server/ext/"
+}
+
+task copyConfiguration(type: Copy) {
+    from project(':collect-web').sourceSets.main.resources
+    into "${rootProject.projectDir}/workspace/collect-server/etc"
+    include('bootstrap.yml', 'logback-spring.xml')
+}
+
+
+ProjectVersion readVersion() {
+
+    if (!versionFile.exists()) {
+        throw new GradleException("需要版本文件: $versionFile.canonicalPath")
+    }
+
+    Properties versionProps = new Properties()
+
+    versionFile.withInputStream { stream -> versionProps.load(stream) }
+
+    new ProjectVersion(versionProps.major.toDouble(), versionProps.minor.toString(), versionProps.release.toBoolean())
+}
+
+test {
+    useJUnitPlatform()
+}
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+build.dependsOn deleteWorkspace
+build.finalizedBy(copyJars, copyDependencies, copyConfiguration)

@@ -1,0 +1,8 @@
+dependencies {
+    api lib."spring-boot-starter-web"
+    api lib."pagehelper"
+    api lib."spring-boot-starter-validation"
+    api lib."swagger2"
+    api lib."springcloudFeign"
+}
+
