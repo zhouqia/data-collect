@@ -14,7 +14,7 @@
         <jdbcConnection driverClass="org.postgresql.Driver"
                         connectionURL="jdbc:postgresql://10.1.1.236:5432/iphms_mall"
                         userId="root"
-                        password="ipharmacare">
+                        password="xxxxxx">
         </jdbcConnection>
 
         <javaTypeResolver type="com.ipharmacare.platform.data.generate.SmallintResolver">
