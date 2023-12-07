@@ -28,17 +28,17 @@ spring:
 #    clickhouse:
 ##      driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
 #      driver-class-name: ru.yandex.clickhouse.ClickHouseDriver
-#      jdbc-url: jdbc:clickhouse://120.26.55.130:8123/data_collect
+#      jdbc-url: jdbc:clickhouse://xx.xx.xx.xx:8123/data_collect
 #      username: root
-#      password: K6fEyXMl
+#      password: xx
 #      initialSize: 10
 #      maxActive: 100
 #      minIdle: 10
 #      maxWait: 6000
 #  redis:
-#    host: 121.43.170.247
+#    host: xx.xx.xx.xx
 #    port: 12010
-#    password: h2Z#V!KNAOzF
+#    password: xxx
 #    database: 15
 server:
   port: 18150
@@ -53,21 +53,4 @@ jasypt:
   encryptor:
     algorithm: PBEWithHmacSHA512AndAES_128
     password: 3b44347899385279a53a3abb1f29f05b
-#tx:
-#  accessKey: AKIDpTv60dy2pKYWDfqlOkpdAPN4UdU4NPAf
-#  secretKey: FDuJRIsABvOZT6SWJp53k9I9j12nGSMz
-#  bucket: ap-nanjing
-#  bucketName: resource-dev-1307863260
-#  path: https://resource-dev-1307863260.cos.ap-nanjing.myqcloud.com/
-#  region: ap-chongqing
-#tencentcloud:
-#  app-id: 1307863260
-#  secret-id: AKID54rNdcT4PyHJ4YkfJgmcBTUEivsZz80b
-#  secret-key: NTJr9AtLXUAZhY8RTFm22mFRM4VgaeRy
-#  cos:
-#    region: ap-nanjing
-#    bucket-name: resource-dev-1307863260
-#    access-domain: https://resource-dev-1307863260.cos.ap-nanjing.myqcloud.com/
-#tentcent-lbs:
-#  key: NMUBZ-NOM3X-YL644-7YK2R-H2K37-2YF4Q
 
